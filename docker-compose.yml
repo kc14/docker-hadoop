@@ -1,11 +1,12 @@
 version: '3'
 services:
   hadoop:
-    
+    container_name: hadoop
+    hostname: hadoop 
     build:
       context: .
       dockerfile: Dockerfile
-    image: parrotstream/hadoop:latest
+    image: hadoop:cdh6.3.0
     external_links:
     - zookeeper
     ports:
@@ -16,7 +17,11 @@ services:
     - 8088:8088
     - 8188:8188
     - 19888:19888
+    networks:
+      default:
+        aliases:
+          - zookeeper
 networks:
   default:
     external:
-      name: parrot_default
+      name: br1

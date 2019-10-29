@@ -1,10 +1,11 @@
-FROM parrotstream/centos-openjdk:8
+FROM centos-adoptopenjdk:8
 
-MAINTAINER Matteo Capitanio <matteo.capitanio@gmail.com>
+LABEL maintainer="Matteo Capitanio <matteo.capitanio@gmail.com>"
+LABEL maintainer="kc14 <kemmer.consulting+kc14@gmail.com>"
 
 USER root
 
-ENV CDH_VERSION 6.0.0
+ENV CDH_VERSION 6.3.0
 
 ADD cloudera-cdh6.repo /etc/yum.repos.d/
 RUN rpm --import https://archive.cloudera.com/cdh6/$CDH_VERSION/redhat7/yum/RPM-GPG-KEY-cloudera
@@ -26,6 +27,7 @@ WORKDIR /
 RUN yum install -y sudo
 
 # Various helper scripts
+ADD bin/start-zookeeper.sh ./
 ADD bin/start-hdfs.sh ./
 ADD bin/start-yarn.sh ./
 ADD bin/supervisord-bootstrap.sh ./

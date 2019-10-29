@@ -3,14 +3,14 @@
 echo -e "\n---------------------------------------"
 
 if [[ ! -e /var/lib/hadoop-hdfs/cache/hdfs/dfs/name/current ]]; then
-    	echo -e	"Initiating HDFS NameNode..."
+	echo -e	"Initializing HDFS NameNode..."
 	/etc/init.d/hadoop-hdfs-namenode init
 	rc=$?
-    	if [ $rc -ne 0 ]; then
-	    	echo -e	"HDFS initiation ERROR!"
-    	else
-        	echo -e	"HDFS successfully initiaded!"
-    	fi
+	if [ $rc -ne 0 ]; then
+		echo -e	"HDFS initialization ERROR!"
+	else
+		echo -e	"HDFS successfully initialized!"
+	fi
 fi
 
 echo -e	"Starting NameNode..."
@@ -18,11 +18,12 @@ supervisorctl start hdfs-namenode
 echo -e	"Starting DataNode..."
 supervisorctl start hdfs-datanode
 
-./wait-for-it.sh localhost:8020 -t 120
+# Wait for NameNode
+./wait-for-it.sh "${HOSTNAME}:8020" -t 120
 rc=$?
 if [ $rc -ne 0 ]; then
     echo -e "\n---------------------------------------"
-    echo -e "     HDFS not ready! Exiting..."
+    echo -e "     HDFS NameNode not ready! Exiting..."
     echo -e "---------------------------------------"
     exit $rc
 fi
